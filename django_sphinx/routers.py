@@ -8,12 +8,12 @@ class SphinxRouter(object):
     def db_for_read(self, model, **kwargs):
         from django_sphinx.backend.models import SphinxModel
         if issubclass(model, SphinxModel):
-            getattr(settings, 'SPHINX_DATABASE_NAME', 'sphinx')
+            return getattr(settings, 'SPHINX_DATABASE_NAME', 'sphinx')
 
     def db_for_write(self, model, **kwargs):
         from django_sphinx.backend.models import SphinxModel
         if issubclass(model, SphinxModel):
-            getattr(settings, 'SPHINX_DATABASE_NAME', 'sphinx')
+            return getattr(settings, 'SPHINX_DATABASE_NAME', 'sphinx')
 
     def allow_relation(self, obj1, obj2, **kwargs):
         # Allow all relations...
