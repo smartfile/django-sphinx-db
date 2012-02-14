@@ -130,3 +130,13 @@ MyIndex.objects.filter(content__search='Foobar')
 The query is passed through directly to Sphinx, so the
 [Sphinx extended query syntax](http://sphinxsearch.com/docs/2.0.2/extended-syntax.html)
 is respected.
+
+Unit Testing
+----
+
+The Sphinx backend for Django will ignore create_test_db and destroy_test_db calls. These
+calls will fail when the Sphinx database is configured, preventing you from running tests.
+However, this means that any configured Sphinx database will be used during testing. As
+long as you write your tests with this in mind, there should be no problem. Remember that you
+can use the TEST_NAME database connection parameter to redirect queries to a different database
+connection during test runs.

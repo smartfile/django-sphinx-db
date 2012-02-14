@@ -14,10 +14,15 @@ class SphinxCreation(MySQLDatabaseCreation):
     def create_test_db(self, verbosity=1, autoclobber=False):
         # NOOP, test using regular sphinx database.
         if self.connection.settings_dict['TEST_NAME']:
-            return self.connection.settings_dict['TEST_NAME']
+            test_name = self.connection.settings_dict['TEST_NAME']
+            self.connection.close()
+            self.connection.settings_dict['NAME'] = test_name
+            cursor = self.connection.cursor()
+            return test_name
         return self.connection.settings_dict['NAME']
 
     def destroy_test_db(self, old_database_name, verbosity=1):
+        # NOOP, we created nothing, nothing to destroy.
         return
 
 
