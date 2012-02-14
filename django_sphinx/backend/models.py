@@ -29,3 +29,7 @@ class SphinxManager(models.Manager):
 
     def get_query_set(self):
         return SphinxQuerySet(self.model).defer('name', 'content')
+
+
+class SphinxModel(models.Model):
+    pass
