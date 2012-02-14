@@ -58,7 +58,7 @@ DATABASE_ROUTERS = (
 )
 ```
 
-Then define a model that derives from the SphinxModel:
+Then define a model that derives from the SphinxModel. As usual, the model will be placed in models.py.
 
 ```python
 from django_sphinx.backend.models import SphinxModel, SphinxField
@@ -87,9 +87,8 @@ $ vi /etc/sphinx.conf
 ```
 
 The generated config file should be a good start however, you are urged to
-check that everything is correct. A reference can be found at the link below.
-
-http://sphinxsearch.com/docs/2.0.2/confgroup-index.html
+review the configuration against the
+[Sphinx configuration reference](http://sphinxsearch.com/docs/2.0.2/confgroup-index.html).
 
 Using the Django ORM with Sphinx
 ----
@@ -100,24 +99,24 @@ below uses the [fulltext library](https://github.com/btimby/fulltext) for readin
 file contents as plain text.
 
 ```python
->>> import os, time, fulltext
->>>
->>> # Add a document to the index.
->>> path = 'resume.doc'
->>> st = os.stat(path)
->>> MyIndex.objects.create(
->>>     name = path,
->>>     content = fulltext.get(path, ''),
->>>     size = st.st_size,
->>>     date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime)),
->>> )
->>>
->>> # Update a document in the index
->>> doc = MyIndex.objects.get(pk=1)
->>> doc.content = fulltext.get(path, '')
->>> doc.size = st.st_size
->>> doc.date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime))
->>> doc.save()
+import os, time, fulltext
+
+# Add a document to the index.
+path = 'resume.doc'
+st = os.stat(path)
+MyIndex.objects.create(
+    name = path,
+    content = fulltext.get(path, ''),
+    size = st.st_size,
+    date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime)),
+)
+
+# Update a document in the index
+doc = MyIndex.objects.get(pk=1)
+doc.content = fulltext.get(path, '')
+doc.size = st.st_size
+doc.date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime))
+doc.save()
 ```
 
 You can perform full-text queries using the Django `search` operator. Read the
@@ -125,7 +124,7 @@ You can perform full-text queries using the Django `search` operator. Read the
 for more information.
 
 ```python
->>> MyIndex.objects.filter(content__search='Foobar')
+MyIndex.objects.filter(content__search='Foobar')
 ```
 
 The query is passed through directly to Sphinx, so the
