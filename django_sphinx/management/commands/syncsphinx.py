@@ -68,8 +68,9 @@ def iter_models():
                 yield model
 
 def iter_fields(model):
-    for i, field in enumerate(model._meta.local_fields):
+    for i, field in enumerate(model._meta.fields):
         if i == model._meta.pk_index():
+            # Don't include the id field in configuration, it is implied.
             continue
         yield field.name, field
 

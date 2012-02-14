@@ -1,14 +1,7 @@
 from django.db import models
 from django.db.models.sql import Query
-from django.db.models.sql.where import WhereNode
 from django.db.models.query import QuerySet
-
-
-class SphinxWhereNode(WhereNode):
-    def sql_for_columns(self, data, qn, connection):
-        table_alias, name, db_type = data
-        return connection.ops.field_cast_sql(db_type) % name
-
+from django_sphinx.backend.sphinx.compiler import SphinxWhereNode
 
 class SphinxQuery(Query):
     compiler = 'SphinxQLCompiler'
@@ -28,8 +21,13 @@ class SphinxManager(models.Manager):
     use_for_related_fields = True
 
     def get_query_set(self):
-        # TODO: make these column names configurable via Meta class.
-        return SphinxQuerySet(self.model).defer('name', 'content')
+        # Determine which fields are sphinx fields (full-text data) and
+        # defer loading them. Sphinx won't return them.
+        # TODO: we probably need a way to keep these from being loaded
+        # later if the attr is accessed.
+        sphinx_fields = [field.name for field in self.model._meta.fields \
+                                if isinstance(field, SphinxField)]
+        return SphinxQuerySet(self.model).defer(*sphinx_fields)
 
 
 class SphinxField(models.TextField):

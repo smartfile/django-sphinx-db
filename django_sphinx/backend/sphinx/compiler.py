@@ -1,4 +1,33 @@
 from django.db.models.sql import compiler
+from django.db.models.sql.where import WhereNode
+
+
+class SphinxWhereNode(WhereNode):
+    def sql_for_columns(self, data, qn, connection):
+        table_alias, name, db_type = data
+        return connection.ops.field_cast_sql(db_type) % name
+
+    def make_atom(self, child, qn, connection):
+        """
+        Transform search, the keyword should not be quoted.
+        """
+        lvalue, lookup_type, value_annot, params_or_value = child
+        sql, params = super(SphinxWhereNode, self).make_atom(child, qn, connection)
+        if lookup_type == 'search':
+            if hasattr(lvalue, 'process'):
+                try:
+                    lvalue, params = lvalue.process(lookup_type, params_or_value, connection)
+                except EmptyShortCircuit:
+                    raise EmptyResultSet
+            if isinstance(lvalue, tuple):
+                # A direct database column lookup.
+                field_sql = self.sql_for_columns(lvalue, qn, connection)
+            else:
+                # A smart object with an as_sql() method.
+                field_sql = lvalue.as_sql(qn, connection)
+            params = ('@%s %s' % (field_sql, params[0]), )
+        return sql, params
+
 
 class SphinxQLCompiler(compiler.SQLCompiler):
     def get_columns(self, *args, **kwargs):

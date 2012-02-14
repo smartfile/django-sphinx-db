@@ -31,15 +31,18 @@ INSTALLED_APPS list.
 # Install django_sphinx:
 INSTALLED_APPS += ('django_sphinx', )
 
+# This is the name of the sphinx server in DATABASES:
+SPHINX_DATABASE_NAME = 'sphinx'
+
 # Define the connection to Sphinx
 DATABASES = {
     'default': {
         # Your default database connection goes here...
     },
-    'sphinx':  {
+    SPHINX_DATABASE_NAME:  {
         'ENGINE': 'django_sphinx.backend.sphinx',
         # The database name does not matter.
-        'NAME': 'foobar',
+        'NAME': '',
         # There is no user name or password.
         'USER': '',
         'PASSWORD': '',
@@ -53,9 +56,6 @@ DATABASES = {
 DATABASE_ROUTERS = (
     'django_sphinx.routers.SphinxRouter',
 )
-
-# Let the router know which database is Sphinx.
-SPHINX_DATABASE_NAME = 'sphinx'
 ```
 
 Then define a model that derives from the SphinxModel:
@@ -96,26 +96,38 @@ Using the Django ORM with Sphinx
 
 You can now query and manage your real-time index using the Django ORM. You can
 insert and update documents in the index using the following methods. The example
-below uses the [fulltext library](https://github.com/btimby/fulltext) for reading file contents as plain text.
+below uses the [fulltext library](https://github.com/btimby/fulltext) for reading
+file contents as plain text.
 
 ```python
-import os, time, fulltext
-
-# Add a document to the index.
-path = 'resume.doc'
-st = os.stat(path)
-MyIndex.objects.create(
-    name = path,
-    content = fulltext.get(path, ''),
-    size = st.st_size,
-    date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime)),
-)
-
-# Update a document in the index
-doc = MyIndex.objects.get(pk=1)
-doc.content = fulltext.get(path, '')
-doc.size = st.st_size
-doc.date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime))
-doc.save()
+>>> import os, time, fulltext
+>>>
+>>> # Add a document to the index.
+>>> path = 'resume.doc'
+>>> st = os.stat(path)
+>>> MyIndex.objects.create(
+>>>     name = path,
+>>>     content = fulltext.get(path, ''),
+>>>     size = st.st_size,
+>>>     date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime)),
+>>> )
+>>>
+>>> # Update a document in the index
+>>> doc = MyIndex.objects.get(pk=1)
+>>> doc.content = fulltext.get(path, '')
+>>> doc.size = st.st_size
+>>> doc.date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime))
+>>> doc.save()
 ```
 
+You can perform full-text queries using the Django `search` operator. Read the
+[Django documentation](https://docs.djangoproject.com/en/dev/ref/models/querysets/#search)
+for more information.
+
+```python
+>>> MyIndex.objects.filter(content__search='Foobar')
+```
+
+The query is passed through directly to Sphinx, so the
+[Sphinx extended query syntax](http://sphinxsearch.com/docs/2.0.2/extended-syntax.html)
+is respected.
