@@ -26,6 +26,7 @@ DATABASES = {
     'default': {
         # Your default database connection goes here...
     },
+    # Currently, you must name this 'sphinx', as it is used in the router.
     'sphinx':  {
         'ENGINE': 'django_sphinx.backend.sphinx',
         # The database name does not matter.

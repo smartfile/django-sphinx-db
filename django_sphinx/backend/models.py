@@ -28,6 +28,7 @@ class SphinxManager(models.Manager):
     use_for_related_fields = True
 
     def get_query_set(self):
+        # TODO: make these column names configurable via Meta class.
         return SphinxQuerySet(self.model).defer('name', 'content')
 
 
