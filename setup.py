@@ -87,7 +87,13 @@ setup(
     url = 'http://github.com/btimby/django-sphinx/',
     download_url = download_url,
     license = 'GPLv3',
-    packages = ["django_sphinx"],
+    packages = [
+        "django_sphinx",
+        "django_sphinx.backend",
+        "django_sphinx.backend.sphinx",
+        "django_sphinx.management",
+        "django_sphinx.management.commands",
+    ],
     classifiers = (
           'Development Status :: 4 - Beta',
           'Intended Audience :: Developers',
