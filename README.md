@@ -7,18 +7,25 @@ contributes to Open Source software.
 Introduction
 ----
 
-This is a simple Django database backend that allows interaction with Sphinx vial SphinxQL. It is basically the default Django MySQL backend with some changes for Sphinx.
+This is a simple Django database backend that allows interaction with Sphinx
+via SphinxQL. It is basically the default Django MySQL backend with some changes
+for Sphinx.
 
-SphinxQL is a MySQL clone mode that Sphinx searchd supports. It allows you to query indexes via regular old SQL syntax. If you are using rt (real-time) indexes, you can also add and update documents in the index.
+SphinxQL is a MySQL clone mode that Sphinx searchd supports. It allows you to
+query indexes via regular old SQL syntax. If you are using rt (real-time) indexes,
+you can also add and update documents in the index.
 
 This backend is meant to be configued as a database in the Django settings.py.
 
-This package provides a Manager class, SQLCompiler suite and supporting code to make this possible.
+This package provides a Manager class, SQLCompiler suite and supporting code to
+make this possible.
 
 Usage
 ----
 
-First of all, you must define a database connection in the Django configuration. You must also install the Sphinx database router and add django_sphinx to your INSTALLED_APPS list.
+First of all, you must define a database connection in the Django configuration.
+You must also install the Sphinx database router and add django_sphinx to your
+INSTALLED_APPS list.
 
 ```python
 # Install django_sphinx:
@@ -71,11 +78,44 @@ class MyIndex(SphinxModel):
 Configuring Sphinx
 ----
 
-Now you need to generate a configuration file for your index. A management command is provided to convert the model definition to a suitable configuration.
+Now you need to generate a configuration file for your index. A management
+command is provided to convert the model definition to a suitable configuration.
 
 ```
 $ python manage.py syncsphinx >> /etc/sphinx.conf
 $ vi /etc/sphinx.conf
 ```
 
-Start searchd 
+The generated config file should be a good start however, you are urged to
+check that everything is correct. A reference can be found at the link below.
+
+http://sphinxsearch.com/docs/2.0.2/confgroup-index.html
+
+Using the Django ORM with Sphinx
+----
+
+You can now query and manage your real-time index using the Django ORM. You can
+insert and update documents in the index using the following methods. The example
+below uses the [fulltext library](https://github.com/btimby/fulltext) for reading file contents as plain text.
+
+```python
+import os, time, fulltext
+
+# Add a document to the index.
+path = 'resume.doc'
+st = os.stat(path)
+MyIndex.objects.create(
+    name = path,
+    content = fulltext.get(path, ''),
+    size = st.st_size,
+    date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime)),
+)
+
+# Update a document in the index
+doc = MyIndex.objects.get(pk=1)
+doc.content = fulltext.get(path, '')
+doc.size = st.st_size
+doc.date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime))
+doc.save()
+```
+
