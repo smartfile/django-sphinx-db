@@ -32,5 +32,10 @@ class SphinxManager(models.Manager):
         return SphinxQuerySet(self.model).defer('name', 'content')
 
 
-class SphinxModel(models.Model):
+class SphinxField(models.TextField):
     pass
+
+
+class SphinxModel(models.Model):
+    class Meta:
+        abstract = True

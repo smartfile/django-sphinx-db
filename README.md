@@ -18,15 +18,17 @@ This package provides a Manager class, SQLCompiler suite and supporting code to 
 Usage
 ----
 
-First of all, you must define a database connection in the Django configuration.
+First of all, you must define a database connection in the Django configuration. You must also install the Sphinx database router and add django_sphinx to your INSTALLED_APPS list.
 
 ```python
+# Install django_sphinx:
+INSTALLED_APPS += ('django_sphinx', )
+
 # Define the connection to Sphinx
 DATABASES = {
     'default': {
         # Your default database connection goes here...
     },
-    # Currently, you must name this 'sphinx', as it is used in the router.
     'sphinx':  {
         'ENGINE': 'django_sphinx.backend.sphinx',
         # The database name does not matter.
@@ -44,18 +46,36 @@ DATABASES = {
 DATABASE_ROUTERS = (
     'django_sphinx.routers.SphinxRouter',
 )
+
+# Let the router know which database is Sphinx.
+SPHINX_DATABASE_NAME = 'sphinx'
 ```
 
 Then define a model that derives from the SphinxModel:
 
 ```python
-from django_sphinx.backend.models import SphinxModel
+from django_sphinx.backend.models import SphinxModel, SphinxField
 
 class MyIndex(SphinxModel):
     class Meta:
         # This next bit is important, you don't want Django to manage
         # the table for this model.
         managed = False
+
+    name = SphinxField()
+    content = SphinxField()
+    date = models.DateTimeField()
+    size = models.IntegerField()
 ```
 
-Now you can start using the ORM to interact with your index.
+Configuring Sphinx
+----
+
+Now you need to generate a configuration file for your index. A management command is provided to convert the model definition to a suitable configuration.
+
+```
+$ python manage.py syncsphinx >> /etc/sphinx.conf
+$ vi /etc/sphinx.conf
+```
+
+Start searchd 

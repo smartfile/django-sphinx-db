@@ -54,6 +54,9 @@ DATABASES = {
 DATABASE_ROUTERS = (
     'django_sphinx.routers.SphinxRouter',
 )
+
+# Let the router know which database is Sphinx.
+SPHINX_DATABASE_NAME = 'sphinx'
 ```
 
 Then define a model that derives from the SphinxModel:
