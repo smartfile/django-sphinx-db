@@ -1,11 +1,22 @@
-A [SmartFile](http://www.smartfile.com/) Open Source project.
-[Read more](http://www.smartfile.com/open-source.html) about how SmartFile uses and
-contributes to Open Source software.
+#!/bin/env python
 
-![SmartFile](http://www.smartfile.com/images/logo.jpg)
+from distutils.core import setup
+
+name = 'django_sphinx'
+version = '0.1'
+release = '1'
+versrel = version + '-' + release
+download_url = 'https://github.com/downloads/btimby/django-sphinx' \
+                           '/' + name + '-' + versrel + '.tar.gz'
+description = """\
+A `SmartFile`_ Open Source project. `Read more`_ about how SmartFile
+uses and contributes to Open Source software.
+
+.. figure:: http://www.smartfile.com/images/logo.jpg
+   :alt: SmartFile
 
 Introduction
-----
+------------
 
 This is a simple Django database backend that allows interaction with Sphinx vial SphinxQL. It is basically the default Django MySQL backend with some changes for Sphinx.
 
@@ -16,7 +27,7 @@ This backend is meant to be configued as a database in the Django settings.py.
 This package provides a Manager class, SQLCompiler suite and supporting code to make this possible.
 
 Usage
-----
+-----
 
 First of all, you must define a database connection in the Django configuration.
 
@@ -58,3 +69,27 @@ class MyIndex(SphinxModel):
 ```
 
 Now you can start using the ORM to interact with your index.
+"""
+
+
+setup(
+    name = name,
+    version = versrel,
+    description = 'Django database backend for SphinxQL.',
+    long_description = description,
+    author = 'Ben Timby',
+    author_email = 'btimby@gmail.com',
+    maintainer = 'Ben Timby',
+    maintainer_email = 'btimby@gmail.com',
+    url = 'http://github.com/btimby/django-sphinx/',
+    download_url = download_url,
+    license = 'GPLv3',
+    packages = ["django_sphinx"],
+    classifiers = (
+          'Development Status :: 4 - Beta',
+          'Intended Audience :: Developers',
+          'Operating System :: OS Independent',
+          'Programming Language :: Python',
+          'Topic :: Software Development :: Libraries :: Python Modules',
+    ),
+)
