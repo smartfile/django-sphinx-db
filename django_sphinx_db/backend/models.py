@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.sql import Query
 from django.db.models.query import QuerySet
-from django_sphinx.backend.sphinx.compiler import SphinxWhereNode
+from django_sphinx_db.backend.sphinx.compiler import SphinxWhereNode
 
 class SphinxQuery(Query):
     compiler = 'SphinxQLCompiler'

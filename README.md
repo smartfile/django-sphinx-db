@@ -24,12 +24,12 @@ Usage
 ----
 
 First of all, you must define a database connection in the Django configuration.
-You must also install the Sphinx database router and add django_sphinx to your
+You must also install the Sphinx database router and add django_sphinx_db to your
 INSTALLED_APPS list.
 
 ```python
-# Install django_sphinx:
-INSTALLED_APPS += ('django_sphinx', )
+# Install django_sphinx_db:
+INSTALLED_APPS += ('django_sphinx_db', )
 
 # This is the name of the sphinx server in DATABASES:
 SPHINX_DATABASE_NAME = 'sphinx'
@@ -40,7 +40,7 @@ DATABASES = {
         # Your default database connection goes here...
     },
     SPHINX_DATABASE_NAME:  {
-        'ENGINE': 'django_sphinx.backend.sphinx',
+        'ENGINE': 'django_sphinx_db.backend.sphinx',
         # The database name does not matter.
         'NAME': '',
         # There is no user name or password.
@@ -54,14 +54,14 @@ DATABASES = {
 
 # ... and route accordingly ...
 DATABASE_ROUTERS = (
-    'django_sphinx.routers.SphinxRouter',
+    'django_sphinx_db.routers.SphinxRouter',
 )
 ```
 
 Then define a model that derives from the SphinxModel. As usual, the model will be placed in models.py.
 
 ```python
-from django_sphinx.backend.models import SphinxModel, SphinxField
+from django_sphinx_db.backend.models import SphinxModel, SphinxField
 
 class MyIndex(SphinxModel):
     class Meta:

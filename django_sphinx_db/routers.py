@@ -6,12 +6,12 @@ class SphinxRouter(object):
     Routes database operations for Sphinx model to the sphinx database connection.
     """
     def db_for_read(self, model, **kwargs):
-        from django_sphinx.backend.models import SphinxModel
+        from django_sphinx_db.backend.models import SphinxModel
         if issubclass(model, SphinxModel):
             return getattr(settings, 'SPHINX_DATABASE_NAME', 'sphinx')
 
     def db_for_write(self, model, **kwargs):
-        from django_sphinx.backend.models import SphinxModel
+        from django_sphinx_db.backend.models import SphinxModel
         if issubclass(model, SphinxModel):
             return getattr(settings, 'SPHINX_DATABASE_NAME', 'sphinx')
 

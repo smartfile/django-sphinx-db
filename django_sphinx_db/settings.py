@@ -1,4 +1,4 @@
-# Django settings for django_sphinx_backend project.
+# Django settings for django_sphinx_db project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -100,7 +100,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'django_sphinx_backend.urls'
+ROOT_URLCONF = 'django_sphinx_db.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
