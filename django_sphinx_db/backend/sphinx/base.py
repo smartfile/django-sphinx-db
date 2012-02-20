@@ -29,5 +29,5 @@ class SphinxCreation(MySQLDatabaseCreation):
 class DatabaseWrapper(MySQLDatabaseWrapper):
     def __init__(self, *args, **kwargs):
         super(DatabaseWrapper, self).__init__(*args, **kwargs)
-        self.ops = SphinxOperations()
+        self.ops = SphinxOperations(self)
         self.creation = SphinxCreation(self)
