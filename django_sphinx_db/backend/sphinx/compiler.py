@@ -7,6 +7,14 @@ class SphinxWhereNode(WhereNode):
         table_alias, name, db_type = data
         return connection.ops.field_cast_sql(db_type) % name
 
+    def as_sql(self, qn, connection):
+        sql, params = super(SphinxWhereNode, self).as_sql(qn, connection)
+        if sql and sql[0] == '(' and sql[-1] == ')':
+            # Trim leading and trailing parenthesis:
+            sql = sql[1:]
+            sql = sql[:-1]
+        return sql, params
+
     def make_atom(self, child, qn, connection):
         """
         Transform search, the keyword should not be quoted.
@@ -37,11 +45,17 @@ class SphinxQLCompiler(compiler.SQLCompiler):
                 columns[i] = column.partition('.')[2]
         return columns
 
+    def quote_name_unless_alias(self, name):
+        return name
+
+
 class SQLInsertCompiler(compiler.SQLInsertCompiler, SphinxQLCompiler):
     pass
 
+
 class SQLDeleteCompiler(compiler.SQLDeleteCompiler, SphinxQLCompiler):
     pass
+
 
 class SQLUpdateCompiler(compiler.SQLUpdateCompiler, SphinxQLCompiler):
     def as_sql(self):
@@ -84,8 +98,10 @@ class SQLUpdateCompiler(compiler.SQLUpdateCompiler, SphinxQLCompiler):
         result.append('VALUES (%s)' % ', '.join(values))
         return ' '.join(result), params
 
+
 class SQLAggregateCompiler(compiler.SQLAggregateCompiler, SphinxQLCompiler):
     pass
+
 
 class SQLDateCompiler(compiler.SQLDateCompiler, SphinxQLCompiler):
     pass
