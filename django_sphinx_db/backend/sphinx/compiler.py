@@ -8,6 +8,9 @@ class SphinxWhereNode(WhereNode):
         return connection.ops.field_cast_sql(db_type) % name
 
     def as_sql(self, qn, connection):
+        # TODO: remove this when no longer needed.
+        # This is to remove the parenthesis from where clauses.
+        # http://sphinxsearch.com/bugs/view.php?id=1150
         sql, params = super(SphinxWhereNode, self).as_sql(qn, connection)
         if sql and sql[0] == '(' and sql[-1] == ')':
             # Trim leading and trailing parenthesis:
@@ -46,6 +49,9 @@ class SphinxQLCompiler(compiler.SQLCompiler):
         return columns
 
     def quote_name_unless_alias(self, name):
+        # TODO: remove this when no longer needed.
+        # This is to remove the `` backticks from identifiers.
+        # http://sphinxsearch.com/bugs/view.php?id=1150
         return name
 
 
