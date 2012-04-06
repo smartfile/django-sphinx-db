@@ -37,3 +37,5 @@ class SphinxField(models.TextField):
 class SphinxModel(models.Model):
     class Meta:
         abstract = True
+
+    objects = SphinxManager()
