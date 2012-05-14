@@ -31,3 +31,12 @@ class DatabaseWrapper(MySQLDatabaseWrapper):
         super(DatabaseWrapper, self).__init__(*args, **kwargs)
         self.ops = SphinxOperations(self)
         self.creation = SphinxCreation(self)
+        # The following can be useful for unit testing, with multiple databases
+        # configured in Django, if one of them does not support transactions,
+        # Django will fall back to using clear/create (instead of begin...rollback)
+        # between each test. The method Django uses to detect transactions uses
+        # CREATE TABLE and DROP TABLE, which ARE NOT supported by Sphinx, even though
+        # transactions ARE. Therefore, we can just set this to True, and Django will
+        # use transactions for clearing data between tests when all OTHER backends
+        # support it.
+        self.features.supports_transactions = True
