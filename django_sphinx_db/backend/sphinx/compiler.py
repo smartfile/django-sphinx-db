@@ -36,7 +36,17 @@ class SphinxWhereNode(WhereNode):
             else:
                 # A smart object with an as_sql() method.
                 field_sql = lvalue.as_sql(qn, connection)
-            params = ('@%s %s' % (field_sql, params[0]), )
+            # TODO: There are a couple problems here.
+            # 1. The user _might_ want to search only a specific field.
+            # 2. However, since Django requires a field name to use the __search operator
+            #    There is no way to do a search in _all_ fields.
+            # 3. Because, using multiple __search operators is not supported.
+            # So, we need to merge multiped __search operators into a single MATCH(), we
+            # can't do that here, we have to do that one level up...
+            # Ignore the field name, search all fields:
+            params = ('@* %s' % params[0])
+            # _OR_ respect the field name, and search on it:
+            #params = ('@%s %s' % (field_sql, params[0]), )
         return sql, params
 
 
