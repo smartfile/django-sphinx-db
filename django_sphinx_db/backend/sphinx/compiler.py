@@ -44,7 +44,7 @@ class SphinxWhereNode(WhereNode):
             # So, we need to merge multiped __search operators into a single MATCH(), we
             # can't do that here, we have to do that one level up...
             # Ignore the field name, search all fields:
-            params = ('@* %s' % params[0])
+            params = ('@* %s' % params[0], )
             # _OR_ respect the field name, and search on it:
             #params = ('@%s %s' % (field_sql, params[0]), )
         return sql, params
