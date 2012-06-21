@@ -2,9 +2,6 @@ from django.db.models.sql import compiler
 from django.db.models.sql.where import WhereNode
 
 
-SQLCompiler = compiler.SQLCompiler
-
-
 class SphinxWhereNode(WhereNode):
     def sql_for_columns(self, data, qn, connection):
         table_alias, name, db_type = data
@@ -66,6 +63,9 @@ class SphinxQLCompiler(compiler.SQLCompiler):
         # This is to remove the `` backticks from identifiers.
         # http://sphinxsearch.com/bugs/view.php?id=1150
         return name
+
+# Set SQLCompiler appropriately, so queries will use the correct compiler.
+SQLCompiler = SphinxQLCompiler
 
 
 class SQLInsertCompiler(compiler.SQLInsertCompiler, SphinxQLCompiler):
