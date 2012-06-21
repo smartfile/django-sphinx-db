@@ -2,6 +2,9 @@ from django.db.models.sql import compiler
 from django.db.models.sql.where import WhereNode
 
 
+SQLCompiler = compiler.SQLCompiler
+
+
 class SphinxWhereNode(WhereNode):
     def sql_for_columns(self, data, qn, connection):
         table_alias, name, db_type = data
