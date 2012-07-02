@@ -4,8 +4,6 @@ from django.db.models.query import QuerySet
 from django_sphinx_db.backend.sphinx.compiler import SphinxWhereNode
 
 class SphinxQuery(Query):
-    compiler = 'SphinxQLCompiler'
-
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('where', SphinxWhereNode)
         super(SphinxQuery, self).__init__(*args, **kwargs)

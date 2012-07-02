@@ -64,6 +64,9 @@ class SphinxQLCompiler(compiler.SQLCompiler):
         # http://sphinxsearch.com/bugs/view.php?id=1150
         return name
 
+# Set SQLCompiler appropriately, so queries will use the correct compiler.
+SQLCompiler = SphinxQLCompiler
+
 
 class SQLInsertCompiler(compiler.SQLInsertCompiler, SphinxQLCompiler):
     pass
