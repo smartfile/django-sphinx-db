@@ -16,6 +16,15 @@ class SphinxQuerySet(QuerySet):
         kwargs.setdefault('query', SphinxQuery(model))
         super(SphinxQuerySet, self).__init__(model, **kwargs)
 
+    def using(self, alias):
+        # Ignore the alias. This will allow the Django router to decide
+        # what db receives the query. Otherwise, when dealing with related
+        # models, Django tries to force all queries to the same database.
+        # This is the right thing to do in cases of master/slave or sharding
+        # but with Sphinx, we want all related queries to flow to Sphinx,
+        # never another configured database.
+        return self._clone()
+
 
 class SphinxManager(models.Manager):
     use_for_related_fields = True
