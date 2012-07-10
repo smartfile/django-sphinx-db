@@ -1,12 +1,13 @@
 #!/bin/env python
 
+import os
 from distutils.core import setup
 
 name = 'django_sphinx_db'
 version = '0.1'
 release = '1'
 versrel = version + '-' + release
-readme = 'README.rst'
+readme = os.path.join(os.path.dirname(__file__), 'README.rst')
 download_url = 'https://github.com/downloads/btimby/django-sphinx-db' \
                            '/' + name + '-' + versrel + '.tar.gz'
 long_description = file(readme).read()
