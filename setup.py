@@ -6,16 +6,16 @@ name = 'django_sphinx_db'
 version = '0.1'
 release = '1'
 versrel = version + '-' + release
-readm = 'README.rst'
+readme = 'README.rst'
 download_url = 'https://github.com/downloads/btimby/django-sphinx-db' \
                            '/' + name + '-' + versrel + '.tar.gz'
-description = file(readme).read()
+long_description = file(readme).read()
 
 setup(
     name = name,
     version = versrel,
     description = 'Django database backend for SphinxQL.',
-    long_description = description,
+    long_description = long_description,
     author = 'Ben Timby',
     author_email = 'btimby@gmail.com',
     maintainer = 'Ben Timby',
