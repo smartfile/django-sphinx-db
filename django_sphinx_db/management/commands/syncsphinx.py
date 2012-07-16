@@ -103,6 +103,6 @@ class Command(BaseCommand):
                 ))
             print CONF_TEMPLATE % dict(
                 fields = '\n\t'.join(field_conf),
-                index_name = model.__name__.lower(),
+                index_name = model._meta.db_table,
                 directory = kwargs.get('directory')
             )
