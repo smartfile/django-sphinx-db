@@ -1,11 +1,10 @@
-import inspect, string
+import inspect
 from optparse import make_option
-from django.db import models
 from django.db.models import fields
 from django.db.models.fields import related
 from django.conf import settings
 from django.utils.importlib import import_module
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django_sphinx_db.backend.models import SphinxModel, SphinxField
 
 
@@ -54,6 +53,7 @@ FIELD_TYPE_MAP = {
     ),
 }
 
+
 def iter_models():
     for app in settings.INSTALLED_APPS:
         try:
@@ -66,6 +66,7 @@ def iter_models():
                issubclass(model, SphinxModel) and \
                model != SphinxModel:
                 yield model
+
 
 def iter_fields(model):
     for i, field in enumerate(model._meta.fields):

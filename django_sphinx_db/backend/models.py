@@ -3,6 +3,7 @@ from django.db.models.sql import Query
 from django.db.models.query import QuerySet
 from django_sphinx_db.backend.sphinx.compiler import SphinxWhereNode
 
+
 class SphinxQuery(Query):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('where', SphinxWhereNode)
@@ -32,7 +33,7 @@ class SphinxManager(models.Manager):
         # defer loading them. Sphinx won't return them.
         # TODO: we probably need a way to keep these from being loaded
         # later if the attr is accessed.
-        sphinx_fields = [field.name for field in self.model._meta.fields \
+        sphinx_fields = [field.name for field in self.model._meta.fields
                                 if isinstance(field, SphinxField)]
         return SphinxQuerySet(self.model).defer(*sphinx_fields)
 
