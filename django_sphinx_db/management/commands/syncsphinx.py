@@ -17,7 +17,6 @@ index %(index_name)s
 	# Options:
 	type			= rt
 	path			= %(directory)s/%(index_name)s
-	min_infix_len		= 3
 	enable_star		= 1
 
 	# Fields:
