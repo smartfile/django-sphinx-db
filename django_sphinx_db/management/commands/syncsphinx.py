@@ -1,11 +1,10 @@
-import inspect, string
+import inspect
 from optparse import make_option
-from django.db import models
 from django.db.models import fields
 from django.db.models.fields import related
 from django.conf import settings
 from django.utils.importlib import import_module
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django_sphinx_db.backend.models import SphinxModel, SphinxField
 
 
@@ -17,7 +16,6 @@ index %(index_name)s
 	# Options:
 	type			= rt
 	path			= %(directory)s/%(index_name)s
-	min_infix_len		= 3
 	enable_star		= 1
 
 	# Fields:
@@ -54,6 +52,7 @@ FIELD_TYPE_MAP = {
     ),
 }
 
+
 def iter_models():
     for app in settings.INSTALLED_APPS:
         try:
@@ -66,6 +65,7 @@ def iter_models():
                issubclass(model, SphinxModel) and \
                model != SphinxModel:
                 yield model
+
 
 def iter_fields(model):
     for i, field in enumerate(model._meta.fields):
@@ -103,6 +103,6 @@ class Command(BaseCommand):
                 ))
             print CONF_TEMPLATE % dict(
                 fields = '\n\t'.join(field_conf),
-                index_name = model.__name__.lower(),
+                index_name = model._meta.db_table,
                 directory = kwargs.get('directory')
             )
