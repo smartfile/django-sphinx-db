@@ -5,10 +5,10 @@ from distutils.core import setup
 
 name = 'django_sphinx_db'
 version = '0.1'
-release = '1'
+release = '2'
 versrel = version + '-' + release
 readme = os.path.join(os.path.dirname(__file__), 'README.rst')
-download_url = 'https://github.com/downloads/btimby/django-sphinx-db' \
+download_url = 'https://github.com/downloads/smartfile/django-sphinx-db' \
                            '/' + name + '-' + versrel + '.tar.gz'
 long_description = file(readme).read()
 
@@ -21,9 +21,9 @@ setup(
     author_email = 'btimby@gmail.com',
     maintainer = 'Ben Timby',
     maintainer_email = 'btimby@gmail.com',
-    url = 'http://github.com/btimby/django-sphinx-db/',
+    url = 'http://github.com/smartfile/django-sphinx-db/',
     download_url = download_url,
-    license = 'GPLv3',
+    license = 'MIT',
     packages = [
         "django_sphinx_db",
         "django_sphinx_db.backend",
